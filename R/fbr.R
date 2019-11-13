@@ -122,7 +122,7 @@ red.fbr <- function(method, x) {
     if (method$w_year) result <- c(result, as.list(x$season_3))
   }
 
-  return(result)
+  return(unlist(result))
 }
 
 distance.fbr <- function(method, x, y) {
