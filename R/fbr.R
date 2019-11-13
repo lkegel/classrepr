@@ -29,7 +29,8 @@ dec.fbr <- function(method, x) {
   fit_last <- fit_week <- stl(ts, s.window = "per")
   season_2 <- fit_week$time.series[, "seasonal"][1:7]
   names(season_2) <- paste0("season_2_", 1:7)
-  season_week <- unlist(mapply(rep, fit_week$time.series[, "seasonal"], method$ymdc))
+  season_week <- unlist(mapply(rep, fit_week$time.series[, "seasonal"],
+                               method$ymdc, SIMPLIFY = F))
   remainder <- remainder - season_week
   residuals <- x - season_week - season_day
   counts <- method$ymdc
@@ -41,7 +42,8 @@ dec.fbr <- function(method, x) {
     fit_last <- fit_year <- stl(ts, s.window = "per")
     season_3 <- fit_week$time.series[, "seasonal"][1:12]
     names(season_3) <- paste0("season_3_", 1:12)
-    season_year <- unlist(mapply(rep, fit_year$time.series[, "seasonal"], method$ymc))
+    season_year <- unlist(mapply(rep, fit_year$time.series[, "seasonal"],
+                                 method$ymc, SIMPLIFY = F))
     counts <- method$ymc
 
     residuals <- residuals - season_year
@@ -51,7 +53,8 @@ dec.fbr <- function(method, x) {
   }
 
   # Trend
-  trend <- unlist(mapply(rep, fit_last$time.series[, "trend"], counts))
+  trend <- unlist(mapply(rep, fit_last$time.series[, "trend"], counts,
+                         SIMPLIFY = F))
   times <- seq(0, length(trend) - 1)
   m <- matrix(c(times, rep(1, TT)), ncol = 2, nrow = TT, byrow = F)
   fit2 <- lm.fit(m, trend)
