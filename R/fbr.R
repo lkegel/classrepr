@@ -12,7 +12,7 @@ init.fbr <- function(method) {
   return(method)
 }
 
-dec.fbr <- function(method, x) {
+dec.fbr <- function(method, x, num_cores) {
   TT <- length(x)
 
   # Day
@@ -99,7 +99,7 @@ acf1 <- function(x) {
 }
 
 #' @import moments
-red.fbr <- function(method, x) {
+red.fbr <- function(method, x, num_cores) {
   result <- list()
 
   if (method$w_strength) {

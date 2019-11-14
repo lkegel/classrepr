@@ -20,13 +20,13 @@ mgr_set_config <- function(method, config) {
 }
 
 #' @export
-mgr_dec <- function(method, x) {
-  dec(method, x)
+mgr_dec <- function(method, x, num_cores = 1) {
+  dec(method, x, num_cores)
 }
 
 #' @export
-mgr_red <- function(method, x) {
-  red(method, x)
+mgr_red <- function(method, x, num_cores = 1) {
+  red(method, x, num_cores)
 }
 
 #' @export

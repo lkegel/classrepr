@@ -27,11 +27,11 @@ set_config.default <- function(method, config) {
   method
 }
 
-dec <- function(method, x) UseMethod("dec")
-dec.default <- function(method, x) stop("Unknown class")
+dec <- function(method, x, num_cores) UseMethod("dec")
+dec.default <- function(method, x, num_cores) stop("Unknown class")
 
-red <- function(method, x) UseMethod("red")
-red.default <- function(method, x) stop("Unknown class")
+red <- function(method, x, num_cores) UseMethod("red")
+red.default <- function(method, x, num_cores) stop("Unknown class")
 
 distance <- function(method, x, y, ...) UseMethod("distance")
 distance.default <- function(method, x, y, ...) stop("Unknown class")
