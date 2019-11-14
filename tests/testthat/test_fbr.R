@@ -119,3 +119,8 @@ test_that("distance", {
 
   expect_lt(d - sqrt(sum((x - y)^2)), .Machine$double.eps)
 })
+
+test_that("is_vectorized", {
+  method <- mgr_init("fbr")
+  expect_true(!mgr_is_vectorized(method))
+})

@@ -129,3 +129,5 @@ distance.fbr <- function(method, x, y) {
   return(d_ed(x, y, length(x)))
 }
 
+is_vectorized.fbr <- function(method) return(F)
+

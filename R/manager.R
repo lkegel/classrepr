@@ -35,3 +35,8 @@ mgr_distance <- function(method, x, y, ...) {
 
   distance(method, x, y, ...)
 }
+
+#' @export
+mgr_is_vectorized <- function(method) {
+  is_vectorized(method)
+}

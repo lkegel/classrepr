@@ -35,3 +35,6 @@ red.default <- function(method, x) stop("Unknown class")
 
 distance <- function(method, x, y, ...) UseMethod("distance")
 distance.default <- function(method, x, y, ...) stop("Unknown class")
+
+is_vectorized <- function(method) UseMethod("is_vectorized")
+is_vectorized.default <- function(method) stop("Unknown class")
