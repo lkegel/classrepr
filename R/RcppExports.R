@@ -5,3 +5,11 @@ d_ed <- function(x, y, TT) {
     .Call(`_classrepr_d_ed`, x, y, TT)
 }
 
+sgn0 <- function(x) {
+    .Call(`_classrepr_sgn0`, x)
+}
+
+red_rld <- function(x) {
+    .Call(`_classrepr_red_rld`, x)
+}
+

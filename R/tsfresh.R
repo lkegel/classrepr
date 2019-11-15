@@ -30,7 +30,9 @@ red.tsfresh <- function(method, x, num_cores) {
   }
   print(paste("Temp file tsfresh:", fp_out))
   res <- system2(cmd, args, input = js)
-  repr <- read.csv(fp_res, colClasses = "numeric")[, -1]
+  repr <- read.csv(fp_res, colClasses = "numeric")
+  stopifnot(unname(repr[, 1]) == seq(I))
+  repr <- repr[, -1]
 
   unlink(fp_out)
   unlink(fp_res)

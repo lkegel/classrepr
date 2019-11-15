@@ -18,9 +18,33 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sgn0
+int sgn0(double x);
+RcppExport SEXP _classrepr_sgn0(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(sgn0(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// red_rld
+IntegerMatrix red_rld(NumericVector x);
+RcppExport SEXP _classrepr_red_rld(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(red_rld(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_classrepr_d_ed", (DL_FUNC) &_classrepr_d_ed, 3},
+    {"_classrepr_sgn0", (DL_FUNC) &_classrepr_sgn0, 1},
+    {"_classrepr_red_rld", (DL_FUNC) &_classrepr_red_rld, 1},
     {NULL, NULL, 0}
 };
 
