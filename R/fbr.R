@@ -125,6 +125,23 @@ red.fbr <- function(method, x, num_cores) {
   return(unlist(result))
 }
 
+#' @import caret
+select_features.fbr <- function(method, X, y, k, num_cores) {
+  # Correlation-based Feature Selection
+  corr_matrix <- cor(X)
+  high_corr <- caret::findCorrelation(corr_matrix, cutoff = 0.75)
+  X <- X[, -high_corr, drop = F]
+
+  # Random Forest
+  sizes <- seq(min(ncol(X), k))
+  control <- caret::rfeControl(functions = caret::rfFuncs, method = "cv", number = 10)
+  results <- caret::rfe(X, as.factor(y), sizes = sizes, rfeControl=control, metric = "Accuracy")
+
+  result <- predictors(results)
+
+  return(result)
+}
+
 distance.fbr <- function(method, x, y) {
   return(d_ed(x, y, length(x)))
 }

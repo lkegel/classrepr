@@ -40,4 +40,31 @@ red.tsfresh <- function(method, x, num_cores) {
   return(repr)
 }
 
+select_features.tsfresh <- function(method, X, y, k, num_cores) {
+  I <- nrow(X)
+  df <- data.frame(id = seq(I))
+  df <- cbind(df, X)
+  df <- cbind(df, y = y)
+
+  fp <- file.path(find.package("classrepr"), "exec", "tsfresh-select.py")
+  fp_out <- tempfile(fileext = ".csv")
+  fp_in <- tempfile(fileext = ".csv")
+  write.table(df, fp_in, row.names = F, sep = ",", quote = FALSE)
+  if (.Platform$OS.type == "unix") {
+    cmd <- "python3"
+    args <- paste(fp, fp_in, fp_out, num_cores)
+  } else if (.Platform$OS.type == "windows") {
+    cmd <- "py"
+    args <- paste("-3", fp, fp_in, fp_out, num_cores)
+  }
+  res <- system2(cmd, args)
+  feat <- read.csv(fp_out, colClasses = "numeric", row.names = NULL)
+  feat <- feat[, -1, drop = FALSE]
+  expect_lte(ncol(feat), 2)
+  unlink(fp_in)
+  unlink(fp_out)
+
+  return(names(feat))
+}
+
 is_vectorized.tsfresh <- function(method) return(T)

@@ -120,6 +120,19 @@ test_that("distance", {
   expect_lt(d - sqrt(sum((x - y)^2)), .Machine$double.eps)
 })
 
+test_that("select_features", {
+  method <- mgr_init("fbr")
+  y <- sample(c(2, 3, 4), 1000, replace = T)
+  foo <- sample(c(2, 3, 4), 1000, replace = T)
+  sq <- sqrt(y)
+  sqf <- sq * 2
+  X <- data.frame(sq = sq, sqf = sqf, foo = foo)
+
+  feat <- mgr_select_features(method, X, y, 1, NA)
+
+  expect_equal(feat, "sqf")
+})
+
 test_that("is_vectorized", {
   method <- mgr_init("fbr")
   expect_true(!mgr_is_vectorized(method))

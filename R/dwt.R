@@ -15,4 +15,13 @@ red.dwt <- function(method, x, num_cores) {
   return(repr)
 }
 
+select_features.dwt <- function(method, X, y, k, num_cores) {
+  means <- apply(X, 2, function(x) mean(x^2))
+  means <- sort(means, decreasing = T)
+  result <- names(means)
+  result <- result[1:min(k, length(result))]
+
+  return(result)
+}
+
 is_vectorized.dwt <- function(method) return(F)

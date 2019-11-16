@@ -30,6 +30,11 @@ mgr_red <- function(method, x, num_cores = 1) {
 }
 
 #' @export
+mgr_select_features <- function(method, X, y, k, num_cores = 1) {
+  select_features(method, X, y, k, num_cores)
+}
+
+#' @export
 mgr_distance <- function(method, x, y, ...) {
   stopifnot(length(x) == length(y))
 

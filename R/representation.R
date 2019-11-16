@@ -33,6 +33,9 @@ dec.default <- function(method, x, num_cores) stop("Unknown class")
 red <- function(method, x, num_cores) UseMethod("red")
 red.default <- function(method, x, num_cores) stop("Unknown class")
 
+select_features <- function(method, X, y, k, num_cores) UseMethod("select_features")
+select_features.default <- function(method, X, y, k, num_cores) stop("Unknown class")
+
 distance <- function(method, x, y, ...) UseMethod("distance")
 distance.default <- function(method, x, y, ...) stop("Unknown class")
 

@@ -28,6 +28,16 @@ test_that("dec_rec", {
   expect_equal(nrow(repr), 2)
 })
 
+test_that("select_features", {
+  method <- mgr_init("tsfresh")
+  y <- sample(2, 100, replace = T)
+  X <- matrix(c(y, sample(2, 100, replace = T)), ncol = 2, nrow = 100,
+              dimnames = list(NULL, c("F1", "F2")))
+
+  feat <- mgr_select_features(method, X, y, NA, 1)
+  expect_equal(feat, "F1")
+})
+
 test_that("is_vectorized", {
   method <- mgr_init("tsfresh")
   expect_true(mgr_is_vectorized(method))
