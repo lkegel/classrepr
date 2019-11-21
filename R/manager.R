@@ -36,8 +36,6 @@ mgr_select_features <- function(method, X, y, k, num_cores = 1) {
 
 #' @export
 mgr_distance <- function(method, x, y, ...) {
-  stopifnot(length(x) == length(y))
-
   distance(method, x, y, ...)
 }
 
