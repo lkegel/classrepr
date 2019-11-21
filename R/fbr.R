@@ -17,7 +17,7 @@ dec.fbr <- function(method, x, num_cores) {
 
   # Day
   ts <- ts(x, frequency = method$frequency)
-  fit_day <- stl(ts, s.window = "per")
+  fit_day <- mystl(ts, s.window = "per")
   season_1 <- fit_day$time.series[, "seasonal"][1:method$frequency]
   names(season_1) <- paste0("season_1_", 1:method$frequency)
   season_day <- as.numeric(fit_day$time.series[, "seasonal"])
@@ -26,7 +26,7 @@ dec.fbr <- function(method, x, num_cores) {
   # Week
   means <- unlist(lapply(unname(split(remainder, method$ymdf)), mean))
   ts <- ts(means, frequency = 7)
-  fit_last <- fit_week <- stl(ts, s.window = "per")
+  fit_last <- fit_week <- mystl(ts, s.window = "per")
   season_2 <- fit_week$time.series[, "seasonal"][1:7]
   names(season_2) <- paste0("season_2_", 1:7)
   season_week <- unlist(mapply(rep, fit_week$time.series[, "seasonal"],
@@ -39,7 +39,7 @@ dec.fbr <- function(method, x, num_cores) {
   if (method$w_year) {
     means <- unlist(lapply(unname(split(remainder, method$ymf)), mean))
     ts <- ts(means, frequency = 12)
-    fit_last <- fit_year <- stl(ts, s.window = "per")
+    fit_last <- fit_year <- mystl(ts, s.window = "per")
     season_3 <- fit_week$time.series[, "seasonal"][1:12]
     names(season_3) <- paste0("season_3_", 1:12)
     season_year <- unlist(mapply(rep, fit_year$time.series[, "seasonal"],
@@ -127,10 +127,16 @@ red.fbr <- function(method, x, num_cores) {
 
 #' @import caret
 select_features.fbr <- function(method, X, y, k, num_cores) {
+  # Drop columns with sd = 0
+  i_sd_0 <- which(apply(X, 2, function(x) sd(x)) == 0)
+  if (length(i_sd_0) > 0) {
+    X <- dim(X[, -i_sd_0, drop = F])
+  }
+
   # Correlation-based Feature Selection
   corr_matrix <- cor(X)
-  high_corr <- caret::findCorrelation(corr_matrix, cutoff = 0.75)
-  X <- X[, -high_corr, drop = F]
+  i_high_corr <- caret::findCorrelation(corr_matrix, cutoff = 0.75)
+  X <- X[, -i_high_corr, drop = F]
 
   # Random Forest
   sizes <- seq(min(ncol(X), k))
@@ -138,6 +144,7 @@ select_features.fbr <- function(method, X, y, k, num_cores) {
   results <- caret::rfe(X, as.factor(y), sizes = sizes, rfeControl=control, metric = "Accuracy")
 
   result <- predictors(results)
+  result <- result[1:min(length(result), k)]
 
   return(result)
 }
