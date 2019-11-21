@@ -42,8 +42,7 @@ red.tsfresh <- function(method, x, num_cores) {
 
 select_features.tsfresh <- function(method, X, y, k, num_cores) {
   I <- nrow(X)
-  df <- data.frame(id = seq(I))
-  df <- cbind(df, X)
+  df <- as.data.frame(X)
   df <- cbind(df, y = y)
 
   fp <- file.path(find.package("classrepr"), "exec", "tsfresh-select.py")
@@ -60,11 +59,14 @@ select_features.tsfresh <- function(method, X, y, k, num_cores) {
   res <- system2(cmd, args)
   feat <- read.csv(fp_out, colClasses = "numeric", row.names = NULL)
   feat <- feat[, -1, drop = FALSE]
-  expect_lte(ncol(feat), 2)
   unlink(fp_in)
   unlink(fp_out)
 
   return(names(feat))
+}
+
+distance.tsfresh <- function(method, x, y) {
+  return(d_ed(x, y, length(x)))
 }
 
 is_vectorized.tsfresh <- function(method) return(T)

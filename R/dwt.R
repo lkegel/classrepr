@@ -24,4 +24,8 @@ select_features.dwt <- function(method, X, y, k, num_cores) {
   return(result)
 }
 
+distance.dwt <- function(method, x, y) {
+  return(d_ed(x, y, length(x)))
+}
+
 is_vectorized.dwt <- function(method) return(F)
