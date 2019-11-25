@@ -130,7 +130,7 @@ select_features.fbr <- function(method, X, y, k, num_cores) {
   # Drop columns with sd = 0
   i_sd_0 <- which(apply(X, 2, function(x) sd(x)) == 0)
   if (length(i_sd_0) > 0) {
-    X <- dim(X[, -i_sd_0, drop = F])
+    X <- X[, -i_sd_0, drop = F]
   }
 
   # Correlation-based Feature Selection
