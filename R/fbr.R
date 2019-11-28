@@ -9,6 +9,8 @@ init.fbr <- function(method) {
   method$ymc <- NA
   method$w_year <- NA
 
+  method$fs <- "caret"
+
   return(method)
 }
 
@@ -126,6 +128,7 @@ red.fbr <- function(method, x, num_cores) {
 }
 
 #' @import caret
+#' @import foreign
 select_features.fbr <- function(method, X, y, k, num_cores) {
   # Drop columns with sd = 0
   i_sd_0 <- which(apply(X, 2, function(x) sd(x)) == 0)
@@ -133,18 +136,46 @@ select_features.fbr <- function(method, X, y, k, num_cores) {
     X <- X[, -i_sd_0, drop = F]
   }
 
-  # Correlation-based Feature Selection
-  corr_matrix <- cor(X)
-  i_high_corr <- caret::findCorrelation(corr_matrix, cutoff = 0.75)
-  X <- X[, -i_high_corr, drop = F]
+  if (method$fs == "caret") {
+    # Correlation-based Feature Selection
+    corr_matrix <- cor(X)
+    i_high_corr <- caret::findCorrelation(corr_matrix, cutoff = 0.75)
+    X <- X[, -i_high_corr, drop = F]
 
-  # Random Forest
-  sizes <- seq(min(ncol(X), k))
-  control <- caret::rfeControl(functions = caret::rfFuncs, method = "cv", number = 10)
-  results <- caret::rfe(X, as.factor(y), sizes = sizes, rfeControl=control, metric = "Accuracy")
+    # Random Forest
+    sizes <- seq(min(ncol(X), k))
+    control <- caret::rfeControl(functions = caret::rfFuncs, method = "cv", number = 10)
+    results <- caret::rfe(X, as.factor(y), sizes = sizes, rfeControl=control, metric = "Accuracy")
 
-  result <- predictors(results)
-  result <- result[1:min(length(result), k)]
+    result <- predictors(results)
+    result <- result[1:min(length(result), k)]
+  } else if (method$fs == "cfs") {
+    df <- as.data.frame(X)
+    df$Code <- y
+    weka_in <- tempfile(fileext = ".arff")
+    weka_out <- tempfile(fileext = ".arff")
+    foreign::write.arff(df, weka_in)
+    command <- "java"
+    weka_jar <- file.path(Sys.getenv("WEKA"), "weka.jar")
+    args <- paste('-classpath', weka_jar,
+                  'weka.filters.supervised.attribute.AttributeSelection -E "weka.attributeSelection.CfsSubsetEval -P 1 -E 1" -S "weka.attributeSelection.BestFirst -D 1 -N 5" -i',
+                  weka_in,
+                  '-o',
+                  weka_out,
+                  '-c "last"')
+    system2(command, args)
+
+    df_out <- foreign::read.arff(weka_out)
+
+    unlink(weka_in)
+    unlink(weka_out)
+
+    result <- names(df_out)
+    result <- result[1:(length(result) - 1)]
+    result <- result[1:min(length(result), k)]
+  } else {
+    stop("N/A")
+  }
 
   return(result)
 }

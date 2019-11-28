@@ -133,6 +133,21 @@ test_that("select_features", {
   expect_equal(feat, "sqf")
 })
 
+test_that("select_features cfs", {
+  method <- mgr_init("fbr")
+  method$fs <- "cfs"
+  df <- iris
+  y <- as.factor(df[, ncol(df)])
+  X <- as.matrix(df[, -ncol(df)])
+
+  feat <- mgr_select_features(method, X, y, 5, NA)
+  expect_true(all(feat %in% names(iris)[1:4]))
+
+  feat <- mgr_select_features(method, X, y, 1, NA)
+  expect_true(all(feat %in% names(iris)[1:4]))
+  expect_equal(length(feat), 1)
+})
+
 test_that("is_vectorized", {
   method <- mgr_init("fbr")
   expect_true(!mgr_is_vectorized(method))
