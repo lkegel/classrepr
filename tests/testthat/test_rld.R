@@ -37,7 +37,7 @@ test_that("dec_rec", {
  expect_equal(dec, x)
 
  repr <- mgr_red(method, dec)
- expect_equal(repr, 1)
+ expect_equal(repr, c(V1 = 1))
 })
 
 test_that("is_vectorized", {
