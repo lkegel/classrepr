@@ -117,7 +117,7 @@ test_that("distance", {
   y <- sample(5, 5)
   d <- mgr_distance(method, x, y)
 
-  expect_lt(d - sqrt(sum((x - y)^2)), .Machine$double.eps)
+  expect_lt(d - sum((x - y)^2), .Machine$double.eps)
 })
 
 test_that("select_features", {

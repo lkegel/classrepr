@@ -5,16 +5,17 @@
 
 using namespace Rcpp;
 
-// d_ed
-double d_ed(NumericVector x, NumericVector y, int TT);
-RcppExport SEXP _classrepr_d_ed(SEXP xSEXP, SEXP ySEXP, SEXP TTSEXP) {
+// d_qed
+double d_qed(NumericVector x, NumericVector y, int TT, double bsf);
+RcppExport SEXP _classrepr_d_qed(SEXP xSEXP, SEXP ySEXP, SEXP TTSEXP, SEXP bsfSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
     Rcpp::traits::input_parameter< int >::type TT(TTSEXP);
-    rcpp_result_gen = Rcpp::wrap(d_ed(x, y, TT));
+    Rcpp::traits::input_parameter< double >::type bsf(bsfSEXP);
+    rcpp_result_gen = Rcpp::wrap(d_qed(x, y, TT, bsf));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -42,7 +43,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_classrepr_d_ed", (DL_FUNC) &_classrepr_d_ed, 3},
+    {"_classrepr_d_qed", (DL_FUNC) &_classrepr_d_qed, 4},
     {"_classrepr_sgn0", (DL_FUNC) &_classrepr_sgn0, 1},
     {"_classrepr_red_rld", (DL_FUNC) &_classrepr_red_rld, 1},
     {NULL, NULL, 0}
