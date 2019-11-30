@@ -65,8 +65,8 @@ select_features.tsfresh <- function(method, X, y, k, num_cores) {
   return(names(feat))
 }
 
-distance.tsfresh <- function(method, x, y) {
-  return(d_ed(x, y, length(x)))
+distance.tsfresh <- function(method, x, y, bsf) {
+  return(d_qed(x, y, length(x), bsf))
 }
 
 is_vectorized.tsfresh <- function(method) return(T)
