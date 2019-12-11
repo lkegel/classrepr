@@ -10,7 +10,7 @@ dec.dwt <- function(method, x, num_cores) {
 
 #' @import wavelets
 red.dwt <- function(method, x, num_cores) {
-  repr <- rev(unlist(wavelets::dwt(x, filter = method$filter)@W))
+  repr <- unlist(wavelets::dwt(x, filter = method$filter)@W)
 
   return(repr)
 }
